@@ -1,6 +1,7 @@
 import org.apache.commons.cli.*;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -28,34 +29,6 @@ public class MyPacketSniffer {
             readFromFile(readFromFileArg,countArg);
         } else {
             readFromNetwork(countArg);
-        }
-    }
-
-    private static void readFromNetwork(int countArg) {
-        SimplePacketDriver driver = new SimplePacketDriver();
-        //Get adapter names and print info
-        String[] adapters = driver.getAdapterNames();
-        System.out.println("Number of adapters: " + adapters.length);
-        for (int i = 0; i < adapters.length; i++) {
-            System.out.println("Device name in Java =" + adapters[i]);
-            if (driver.openAdapter(adapters[i])) {
-                System.out.println("Adapter is open: " + adapters[0]);
-                break;
-            }
-        }
-        int count = 0;
-        while (count < countArg || count == -1) {
-            byte[] packet;
-            //Read a packet. Blocking call
-            packet = driver.readPacket();
-            //Wrap it into a ByteBuffer
-            ByteBuffer Packet = ByteBuffer.wrap(packet);
-            //Print packet summary
-            System.out.println("Packet: " + Packet + " with capacity: " + Packet.capacity());
-            System.out.println(driver.byteArrayToString(packet));
-            if(count != -1) {
-                count++;
-            }
         }
     }
 
@@ -107,9 +80,10 @@ public class MyPacketSniffer {
         }
     }
 
-    private static void readFromFile(String fileName,int countArg) {
+    private static void readFromFile(String fileName, int countArg) {
         //TODO:Simply read from file and output
         FileReader fileReader;
+        SimplePacketDriver driver = new SimplePacketDriver();
         try {
             fileReader = new FileReader(fileName);
 
@@ -117,24 +91,65 @@ public class MyPacketSniffer {
 
             String line;
             int count = 0;
+            ByteArrayOutputStream packetStream = new ByteArrayOutputStream();
+            byte[] packet;
+            int integervalue = 0x0;
 
+            // Read from the file into a packet array similar to the format of that network
             while (true) {
                 line = bufferedReader.readLine();
-                if(count < countArg || countArg == -1){
-                    System.out.println(line);
+                if ((count < countArg || countArg == -1) && line != null) {
+                    line = line.replace(" ", "");   // Trim out the spaces
+                    for (int i = 0; i < line.length(); i += 2) {
+                        integervalue = Integer.parseInt(line.substring(i, i + 2), 16);    // convert the String to hex integer
+                        packetStream.write(ByteBuffer.allocate(4).putInt(integervalue).array()[3]);
+                    }
                     if(line.isEmpty()){
+                        packet = new byte[packetStream.toByteArray().length / 2];
+                        packet = packetStream.toByteArray();
+                        // Send to the ethernet frame decoder
+//                        System.out.println(driver.byteArrayToString(packet));
                         count++;
                     }
                 } else{
                     break;
                 }
             }
-
             bufferedReader.close();
+
+
         } catch (IOException e) {
             System.out.println("File provided " + fileName + " does not exist or could not be found!!");
             System.exit(0);
         }
+
+    }
+
+    private static void readFromNetwork(int countArg) {
+        SimplePacketDriver driver = new SimplePacketDriver();
+        //Get adapter names and print info
+        String[] adapters = driver.getAdapterNames();
+        System.out.println("Number of adapters: " + adapters.length);
+        for (int i = 0; i < adapters.length; i++) {
+            System.out.println("Device name in Java =" + adapters[i]);
+            if (driver.openAdapter(adapters[i])) {
+                System.out.println("Adapter is open: " + adapters[0]);
+                break;
+            }
+        }
+        int count = 0;
+        while (count < countArg || count == -1) {
+            byte[] packet;
+            // Read a packet. Blocking call
+            packet = driver.readPacket();
+            // Send to the ethernet frame decoder
+            if (count != -1) {
+                count++;
+            }
+        }
+    }
+
+    private static void ethernetDecode(byte[] packet) {
 
     }
 }
