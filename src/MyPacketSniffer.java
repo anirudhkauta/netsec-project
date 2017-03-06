@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 public class MyPacketSniffer {
+    static SimplePacketDriver driver = new SimplePacketDriver();
     public static void main(String[] args) {
 
         CommandLine cmd = getCommandFormatter(args);
@@ -81,9 +82,7 @@ public class MyPacketSniffer {
     }
 
     private static void readFromFile(String fileName, int countArg) {
-        //TODO:Simply read from file and output
         FileReader fileReader;
-        SimplePacketDriver driver = new SimplePacketDriver();
         try {
             fileReader = new FileReader(fileName);
 
@@ -92,7 +91,7 @@ public class MyPacketSniffer {
             String line;
             int count = 0;
             ByteArrayOutputStream packetStream = new ByteArrayOutputStream();
-            byte[] packet;
+            byte[] packetBytes;
             int integervalue = 0x0;
 
             // Read from the file into a packet array similar to the format of that network
@@ -105,10 +104,10 @@ public class MyPacketSniffer {
                         packetStream.write(ByteBuffer.allocate(4).putInt(integervalue).array()[3]);
                     }
                     if(line.isEmpty()){
-                        packet = new byte[packetStream.toByteArray().length / 2];
-                        packet = packetStream.toByteArray();
+                        packetBytes = new byte[packetStream.toByteArray().length / 2];
+                        packetBytes = packetStream.toByteArray();
                         // Send to the ethernet frame decoder
-//                        System.out.println(driver.byteArrayToString(packet));
+                        ethernetDecode(packetBytes);
                         count++;
                     }
                 } else{
@@ -126,7 +125,6 @@ public class MyPacketSniffer {
     }
 
     private static void readFromNetwork(int countArg) {
-        SimplePacketDriver driver = new SimplePacketDriver();
         //Get adapter names and print info
         String[] adapters = driver.getAdapterNames();
         System.out.println("Number of adapters: " + adapters.length);
@@ -143,13 +141,49 @@ public class MyPacketSniffer {
             // Read a packet. Blocking call
             packet = driver.readPacket();
             // Send to the ethernet frame decoder
+            ethernetDecode(packet);
             if (count != -1) {
                 count++;
             }
         }
     }
 
+    // Read and decodes the ethernet frame
     private static void ethernetDecode(byte[] packet) {
+//        System.out.println(driver.byteArrayToString(packet));
+
+        int count = 0;
+
+        String destAddr = "", srcAddr = "", ethertype = "";
+
+        for (byte b : packet) {
+            if (count < 6) {
+                destAddr += driver.byteToHex(packet[count]);
+                count++;
+                if (count < 6) {
+                    destAddr += ":";
+                }
+            } else if (count < 12) {
+                srcAddr += driver.byteToHex(packet[count]);
+                count++;
+                if (count < 12) {
+                    srcAddr += ":";
+                }
+            } else if (count < 14) {
+                ethertype += driver.byteToHex(packet[count]);
+                count++;
+            }
+        }
+        System.out.println("Destination MAC Address: " + destAddr);
+        System.out.println("Source MAC Address: " + srcAddr);
+        System.out.println("Ether type: " + ethertype);
+
+        ipdecode(packet, count);
+
+    }
+
+    private static void ipdecode(byte[] packet, int count) {
+        String IPVersion = "", flags = "", offset = "", checksum = "", srcaddr = "", dstaddr = "", ttl = "", protocol = "";
 
     }
 }
