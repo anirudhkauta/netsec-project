@@ -4,9 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class MyPacketSniffer {
     public static void main(String[] args) {
@@ -112,13 +109,13 @@ public class MyPacketSniffer {
 
     private static void readFromFile(String fileName,int countArg) {
         //TODO:Simply read from file and output
-        FileReader fileReader = null;
+        FileReader fileReader;
         try {
             fileReader = new FileReader(fileName);
 
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-            String line = null;
+            String line;
             int count = 0;
 
             while (true) {
