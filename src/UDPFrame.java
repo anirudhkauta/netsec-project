@@ -1,6 +1,6 @@
 
 public class UDPFrame {
-    Constants constants = new Constants();
+    Constants constants = Constants.getConstants();
 
     private String srcPort = "";
     private String dstPort = "";

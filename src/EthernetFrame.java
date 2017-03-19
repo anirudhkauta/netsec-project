@@ -1,6 +1,6 @@
 public class EthernetFrame {
 
-    Constants constants = new Constants();
+    Constants constants = Constants.getConstants();
 
     private String destAddr = "", srcAddr = "", etherType = "";
     private int count = 0;

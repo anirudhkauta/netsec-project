@@ -1,7 +1,7 @@
 import java.math.BigInteger;
 
 public class TCPFrame {
-    private Constants constants = new Constants();
+    Constants constants = Constants.getConstants();
     private String srcPort = "";
     private String dstPort = "";
     private String seqNum = "";

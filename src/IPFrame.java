@@ -1,5 +1,5 @@
 public class IPFrame {
-    Constants constants = new Constants();
+    Constants constants = Constants.getConstants();
 
     private int count = constants.ETHER_PAYLOAD;
     private String IPVersion = "";
