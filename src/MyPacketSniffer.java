@@ -108,6 +108,7 @@ public class MyPacketSniffer {
                         packetBytes = packetStream.toByteArray();
                         // Send to the ethernet frame decoder
                         ethernetDecode(packetBytes);
+                        ipdecode(packetBytes);
                         count++;
                     }
                 } else{
@@ -142,6 +143,7 @@ public class MyPacketSniffer {
             packet = driver.readPacket();
             // Send to the ethernet frame decoder
             ethernetDecode(packet);
+            ipdecode(packet);
             if (count != -1) {
                 count++;
             }
@@ -150,40 +152,26 @@ public class MyPacketSniffer {
 
     // Read and decodes the ethernet frame
     private static void ethernetDecode(byte[] packet) {
-//        System.out.println(driver.byteArrayToString(packet));
-
-        int count = 0;
-
-        String destAddr = "", srcAddr = "", ethertype = "";
-
-        for (byte b : packet) {
-            if (count < 6) {
-                destAddr += driver.byteToHex(packet[count]);
-                count++;
-                if (count < 6) {
-                    destAddr += ":";
-                }
-            } else if (count < 12) {
-                srcAddr += driver.byteToHex(packet[count]);
-                count++;
-                if (count < 12) {
-                    srcAddr += ":";
-                }
-            } else if (count < 14) {
-                ethertype += driver.byteToHex(packet[count]);
-                count++;
-            }
-        }
-        System.out.println("Destination MAC Address: " + destAddr);
-        System.out.println("Source MAC Address: " + srcAddr);
-        System.out.println("Ether type: " + ethertype);
-
-        ipdecode(packet, count);
+        System.out.println(driver.byteArrayToString(packet));
+        EthernetFrame ethernetFrame = new EthernetFrame(packet, driver);
+        System.out.println("Destination MAC Address: " + ethernetFrame.getDestAddr());
+        System.out.println("Source MAC Address: " + ethernetFrame.getSrcAddr());
+        System.out.println("Ether type: " + ethernetFrame.getEtherType());
 
     }
 
-    private static void ipdecode(byte[] packet, int count) {
-        String IPVersion = "", flags = "", offset = "", checksum = "", srcaddr = "", dstaddr = "", ttl = "", protocol = "";
+    private static void ipdecode(byte[] packet) {
+        IPFrame ipFrame = new IPFrame(packet, driver);
+        System.out.println("IP Version: " + ipFrame.getIPVersion());
+        System.out.println("Type of Service: " + ipFrame.getTOS());
+        System.out.println("Total Length: " + ipFrame.getTotalLen());
+        System.out.println("Identifier: " + ipFrame.getIdent());
+        System.out.println("Flags: " + ipFrame.getFlags());
+        System.out.println("Offset: " + ipFrame.getOffset());
+        System.out.println("TTL: " + ipFrame.getTtl());
+        System.out.println("Protocol: " + ipFrame.getProtocol());
+        System.out.println("Source IP Address: " + ipFrame.getSrcAddr());
+        System.out.println("Destination IP Address: " + ipFrame.getDstAddr());
 
     }
 }
