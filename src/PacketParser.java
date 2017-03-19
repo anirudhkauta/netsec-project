@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-public class MyPacketSniffer {
+public class PacketParser {
     static SimplePacketDriver driver = new SimplePacketDriver();
     public static void main(String[] args) {
 
@@ -109,6 +109,7 @@ public class MyPacketSniffer {
                         // Send to the ethernet frame decoder
                         ethernetDecode(packetBytes);
                         ipdecode(packetBytes);
+                        udpdecode(packetBytes);
                         count++;
                     }
                 } else{
@@ -144,6 +145,7 @@ public class MyPacketSniffer {
             // Send to the ethernet frame decoder
             ethernetDecode(packet);
             ipdecode(packet);
+            udpdecode(packet);
             if (count != -1) {
                 count++;
             }
@@ -152,7 +154,7 @@ public class MyPacketSniffer {
 
     // Read and decodes the ethernet frame
     private static void ethernetDecode(byte[] packet) {
-        System.out.println(driver.byteArrayToString(packet));
+//        System.out.println(driver.byteArrayToString(packet));
         EthernetFrame ethernetFrame = new EthernetFrame(packet, driver);
         System.out.println("Destination MAC Address: " + ethernetFrame.getDestAddr());
         System.out.println("Source MAC Address: " + ethernetFrame.getSrcAddr());
@@ -161,7 +163,9 @@ public class MyPacketSniffer {
     }
 
     private static void ipdecode(byte[] packet) {
+//        System.out.println(driver.byteArrayToString(packet));
         IPFrame ipFrame = new IPFrame(packet, driver);
+
         System.out.println("IP Version: " + ipFrame.getIPVersion());
         System.out.println("Type of Service: " + ipFrame.getTOS());
         System.out.println("Total Length: " + ipFrame.getTotalLen());
@@ -173,5 +177,15 @@ public class MyPacketSniffer {
         System.out.println("Source IP Address: " + ipFrame.getSrcAddr());
         System.out.println("Destination IP Address: " + ipFrame.getDstAddr());
 
+    }
+
+    private static void udpdecode(byte[] packet) {
+//        System.out.println(driver.byteArrayToString(packet));
+        UDPFrame udpFrame = new UDPFrame(packet, driver);
+
+        System.out.println("Source Port: " + udpFrame.getSrcPort());
+        System.out.println("Destination Port: " + udpFrame.getDstPort());
+        System.out.println("UDP Header Length: " + udpFrame.getLength());
+        System.out.println("UDP Checksum: " + udpFrame.getChecksum());
     }
 }

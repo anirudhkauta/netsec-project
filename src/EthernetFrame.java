@@ -5,6 +5,9 @@ public class EthernetFrame {
     private String destAddr = "", srcAddr = "", etherType = "";
     private int count = 0;
 
+    private EthernetFrame() {
+    }
+
     public EthernetFrame(byte[] packet, SimplePacketDriver driver) {
         for (byte b : packet) {
             if (count < constants.MAC_DEST_LEN) {

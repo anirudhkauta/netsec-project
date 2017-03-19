@@ -14,6 +14,8 @@ public class IPFrame {
     private String srcAddr = "";
     private String dstAddr = "";
 
+    private IPFrame() {
+    }
     public IPFrame(byte[] packet, SimplePacketDriver driver) {
         for (byte b : packet) {
             if (count < constants.IPVER_LEN) {
@@ -44,17 +46,6 @@ public class IPFrame {
         }
     }
 
-    private static String hexToDec(String hexString) {
-        Integer temp;
-        String num, actualString = "";
-        for (int i = 0; i < hexString.length(); i += 2) {
-            num = hexString.substring(i, i + 2);
-            temp = Integer.valueOf(num, 16);
-            actualString += temp.toString();
-        }
-        return actualString;
-    }
-
     public String getIPVersion() {
         return IPVersion;
     }
@@ -64,7 +55,7 @@ public class IPFrame {
     }
 
     public String getTotalLen() {
-        return hexToDec(totalLen);
+        return constants.hexToDec(totalLen);
     }
 
     public String getIdent() {
@@ -76,15 +67,15 @@ public class IPFrame {
     }
 
     public String getOffset() {
-        return hexToDec(offset);
+        return constants.hexToDec(offset);
     }
 
     public String getTtl() {
-        return hexToDec(ttl);
+        return constants.hexToDec(ttl);
     }
 
     public String getProtocol() {
-        return hexToDec(protocol);
+        return constants.hexToDec(protocol);
     }
 
     public String getChecksum() {
@@ -99,6 +90,7 @@ public class IPFrame {
             temp = Integer.valueOf(num, 16);
             actualSrcAddr += temp.toString() + ".";
         }
+        System.out.println("Source Address in Hex" + srcAddr);
         return actualSrcAddr;
     }
 
@@ -110,6 +102,7 @@ public class IPFrame {
             temp = Integer.valueOf(num, 16);
             actualDstAddr += temp.toString() + ".";
         }
+        System.out.println("Destination Address in Hex" + dstAddr);
         return actualDstAddr;
     }
 }

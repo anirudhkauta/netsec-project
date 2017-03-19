@@ -24,10 +24,22 @@ public class Constants {
     public final int IP_PAYLOAD = DEST_ADDR_LEN;
 
     //UDP Constants
-//    public final int SRC_PORT_LEN = DEST_ADDR_LEN + 2;
-//    public final int DST_PORT_LEN =  SRC_PORT_LEN + 2;
-//    public final int UDP_CHECKSUM_LEN = DST_PORT_LEN + 2;
-//
-//    public final int UDP_PAYLOAD = UDP_CHECKSUM_LEN;
+    public final int SRC_PORT_LEN = DEST_ADDR_LEN + 2;
+    public final int DST_PORT_LEN = SRC_PORT_LEN + 2;
+    public final int UDP_HEADER_LEN = DST_PORT_LEN + 2;
+    public final int UDP_CHECKSUM_LEN = UDP_HEADER_LEN + 2;
+
+    public final int UDP_PAYLOAD = UDP_CHECKSUM_LEN;
+
+    public String hexToDec(String hexString) {
+        Integer temp;
+        String num, actualString = "";
+        for (int i = 0; i < hexString.length(); i += 2) {
+            num = hexString.substring(i, i + 2);
+            temp = Integer.valueOf(num, 16);
+            actualString += temp.toString();
+        }
+        return actualString;
+    }
 
 }
