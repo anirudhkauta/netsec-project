@@ -23,13 +23,21 @@ public class Constants {
 
     public final int IP_PAYLOAD = DEST_ADDR_LEN;
 
-    //UDP Constants
+    //Common TCP and UDP Constants
     public final int SRC_PORT_LEN = DEST_ADDR_LEN + 2;
     public final int DST_PORT_LEN = SRC_PORT_LEN + 2;
+
+    //UDP Constants
     public final int UDP_HEADER_LEN = DST_PORT_LEN + 2;
     public final int UDP_CHECKSUM_LEN = UDP_HEADER_LEN + 2;
 
     public final int UDP_PAYLOAD = UDP_CHECKSUM_LEN;
+
+    //TCP Constants
+    public final int TCP_SEQ_NO = DST_PORT_LEN + 4;
+    public final int TCP_ACK_NO = TCP_SEQ_NO + 4;
+
+    public final int TCP_PAYLOAD = 24;
 
     public String hexToDec(String hexString) {
         Integer temp;

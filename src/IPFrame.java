@@ -90,7 +90,7 @@ public class IPFrame {
             temp = Integer.valueOf(num, 16);
             actualSrcAddr += temp.toString() + ".";
         }
-        System.out.println("Source Address in Hex" + srcAddr);
+//        System.out.println("Source Address in Hex: " + srcAddr);
         return actualSrcAddr;
     }
 
@@ -102,7 +102,7 @@ public class IPFrame {
             temp = Integer.valueOf(num, 16);
             actualDstAddr += temp.toString() + ".";
         }
-        System.out.println("Destination Address in Hex" + dstAddr);
+//        System.out.println("Destination Address in Hex: " + dstAddr);
         return actualDstAddr;
     }
 }

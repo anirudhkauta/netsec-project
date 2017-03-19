@@ -107,9 +107,10 @@ public class PacketParser {
                         packetBytes = new byte[packetStream.toByteArray().length / 2];
                         packetBytes = packetStream.toByteArray();
                         // Send to the ethernet frame decoder
-                        ethernetDecode(packetBytes);
-                        ipdecode(packetBytes);
-                        udpdecode(packetBytes);
+//                        ethernetDecode(packetBytes);
+//                        ipdecode(packetBytes);
+//                        udpdecode(packetBytes);
+                        tcpDecode(packetBytes);
                         count++;
                     }
                 } else{
@@ -154,7 +155,7 @@ public class PacketParser {
 
     // Read and decodes the ethernet frame
     private static void ethernetDecode(byte[] packet) {
-//        System.out.println(driver.byteArrayToString(packet));
+        System.out.println(driver.byteArrayToString(packet));
         EthernetFrame ethernetFrame = new EthernetFrame(packet, driver);
         System.out.println("Destination MAC Address: " + ethernetFrame.getDestAddr());
         System.out.println("Source MAC Address: " + ethernetFrame.getSrcAddr());
@@ -187,5 +188,17 @@ public class PacketParser {
         System.out.println("Destination Port: " + udpFrame.getDstPort());
         System.out.println("UDP Header Length: " + udpFrame.getLength());
         System.out.println("UDP Checksum: " + udpFrame.getChecksum());
+    }
+
+    private static void tcpDecode(byte[] packet) {
+        System.out.println(driver.byteArrayToString(packet));
+
+        TCPFrame tcpFrame = new TCPFrame(packet, driver);
+
+        System.out.println("Source Port: " + tcpFrame.getSrcPort());
+        System.out.println("Destination Port: " + tcpFrame.getDstPort());
+        System.out.println("Sequence Number: " + tcpFrame.getSeqNum());
+        System.out.println("Acknowledge Number: " + tcpFrame.getAckNum());
+        System.out.println("Body: " + tcpFrame.getBody());
     }
 }

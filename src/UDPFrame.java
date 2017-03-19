@@ -27,13 +27,13 @@ public class UDPFrame {
     }
 
     public String getSrcPort() {
-        System.out.println("Source port in hex: " + srcPort);
-        return constants.hexToDec(srcPort);
+//        System.out.println("Source port in hex: " + srcPort);
+        return Integer.valueOf(srcPort, 16).toString();
     }
 
     public String getDstPort() {
-        System.out.println("Destination port in hex: " + dstPort);
-        return constants.hexToDec(dstPort);
+//        System.out.println("Destination port in hex: " + dstPort);
+        return Integer.valueOf(dstPort, 16).toString();
     }
 
     public String getLength() {
