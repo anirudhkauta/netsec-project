@@ -83,26 +83,12 @@ public class IPFrame {
     }
 
     public String getSrcAddr() {
-        Integer temp;
-        String num, actualSrcAddr = "";
-        for (int i = 0; i < srcAddr.length(); i += 2) {
-            num = srcAddr.substring(i, i + 2);
-            temp = Integer.valueOf(num, 16);
-            actualSrcAddr += temp.toString() + ".";
-        }
 //        System.out.println("Source Address in Hex: " + srcAddr);
-        return actualSrcAddr;
+        return constants.getIPAddress(srcAddr);
     }
 
     public String getDstAddr() {
-        Integer temp;
-        String num, actualDstAddr = "";
-        for (int i = 0; i < dstAddr.length(); i += 2) {
-            num = dstAddr.substring(i, i + 2);
-            temp = Integer.valueOf(num, 16);
-            actualDstAddr += temp.toString() + ".";
-        }
 //        System.out.println("Destination Address in Hex: " + dstAddr);
-        return actualDstAddr;
+        return constants.getIPAddress(dstAddr);
     }
 }

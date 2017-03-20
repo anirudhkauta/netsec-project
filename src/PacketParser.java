@@ -110,7 +110,8 @@ public class PacketParser {
 //                        ethernetDecode(packetBytes);
 //                        ipdecode(packetBytes);
 //                        udpdecode(packetBytes);
-                        tcpDecode(packetBytes);
+//                        tcpDecode(packetBytes);
+                        arpDecode(packetBytes);
                         count++;
                     }
                 } else{
@@ -191,7 +192,7 @@ public class PacketParser {
     }
 
     private static void tcpDecode(byte[] packet) {
-        System.out.println(driver.byteArrayToString(packet));
+//        System.out.println(driver.byteArrayToString(packet));
 
         TCPFrame tcpFrame = new TCPFrame(packet, driver);
 
@@ -200,5 +201,20 @@ public class PacketParser {
         System.out.println("Sequence Number: " + tcpFrame.getSeqNum());
         System.out.println("Acknowledge Number: " + tcpFrame.getAckNum());
         System.out.println("Body: " + tcpFrame.getBody());
+    }
+
+    private static void arpDecode(byte[] packet) {
+        ARPFrame arpFrame = new ARPFrame(packet, driver);
+
+        System.out.println("Hardware type: " + arpFrame.getHwdType());
+        System.out.println("Protocol type: " + arpFrame.getProtoType());
+        System.out.println("Hardware size: " + arpFrame.getHwdSize());
+        System.out.println("Protocol size: " + arpFrame.getProtoSize());
+        System.out.println("Opcode: " + arpFrame.getOpcode());
+        System.out.println("Sender MAC Address: " + arpFrame.getSenderMacAddr());
+        System.out.println("Sender IP Address: " + arpFrame.getSenderIPAddr());
+        System.out.println("Target MAC Address: " + arpFrame.getTargetMacAddr());
+        System.out.println("Target IP Address: " + arpFrame.getTargetIPAddr());
+
     }
 }
