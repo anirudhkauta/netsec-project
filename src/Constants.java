@@ -50,6 +50,21 @@ public class Constants {
     public final int TARGET_IP_ADDR = TARGET_MAC_ADDR + 4;
 
     //ICMP Constants
+    public final int ICMP_VER = ETHER_PAYLOAD + 2;
+    public final int ICMP_HEADER_LEN = 1;
+    public final int ICMP_TOS_LEN = ICMP_VER + 1;
+    public final int ICMP_TOTAL_LEN = ICMP_TOS_LEN + 2;
+    public final int ICMP_IDENT_LEN = ICMP_TOTAL_LEN + 2;
+    public final int ICMP_FLAG_LEN = ICMP_IDENT_LEN + 1;
+    public final int ICMP_OFFSET_LEN = ICMP_IDENT_LEN + 2;
+    public final int ICMP_TTL_LEN = ICMP_OFFSET_LEN + 1;
+    public final int ICMP_PROTOCOL_LEN = ICMP_TTL_LEN + 1;
+    public final int ICMP_HEADER_CHECKSUM_LEN = ICMP_PROTOCOL_LEN + 2;
+    public final int ICMP_SRC_ADDR_LEN = ICMP_HEADER_CHECKSUM_LEN + 4;
+    public final int ICMP_DEST_ADDR_LEN = ICMP_SRC_ADDR_LEN + 4;
+    public final int ICMP_TYPE = ICMP_DEST_ADDR_LEN + 2;
+    public final int ICMP_CODE = ICMP_TYPE + 2;
+    public final int ICMP_CHECKSUM = ICMP_CODE + 4;
 
 
     private Constants() {

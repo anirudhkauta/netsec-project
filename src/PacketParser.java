@@ -107,11 +107,12 @@ public class PacketParser {
                         packetBytes = new byte[packetStream.toByteArray().length / 2];
                         packetBytes = packetStream.toByteArray();
                         // Send to the ethernet frame decoder
-//                        ethernetDecode(packetBytes);
+                        ethernetDecode(packetBytes);
 //                        ipdecode(packetBytes);
 //                        udpdecode(packetBytes);
 //                        tcpDecode(packetBytes);
-                        arpDecode(packetBytes);
+//                        arpDecode(packetBytes);
+                        icmpDecode(packetBytes);
                         count++;
                     }
                 } else{
@@ -178,7 +179,6 @@ public class PacketParser {
         System.out.println("Protocol: " + ipFrame.getProtocol());
         System.out.println("Source IP Address: " + ipFrame.getSrcAddr());
         System.out.println("Destination IP Address: " + ipFrame.getDstAddr());
-
     }
 
     private static void udpdecode(byte[] packet) {
@@ -215,6 +215,22 @@ public class PacketParser {
         System.out.println("Sender IP Address: " + arpFrame.getSenderIPAddr());
         System.out.println("Target MAC Address: " + arpFrame.getTargetMacAddr());
         System.out.println("Target IP Address: " + arpFrame.getTargetIPAddr());
+    }
 
+    private static void icmpDecode(byte[] packet) {
+        ICMPFrame icmpFrame = new ICMPFrame(packet, driver);
+
+        System.out.println("IP Version: " + icmpFrame.getIcmpVer());
+        System.out.println("Type of Service: " + icmpFrame.getTOS());
+        System.out.println("Total Length: " + icmpFrame.getTotalLen());
+        System.out.println("Identifier: " + icmpFrame.getIdent());
+        System.out.println("Flags: " + icmpFrame.getFlags());
+        System.out.println("Offset: " + icmpFrame.getOffset());
+        System.out.println("TTL: " + icmpFrame.getTtl());
+        System.out.println("Protocol: " + icmpFrame.getProtocol());
+        System.out.println("Source IP Address: " + icmpFrame.getSrcAddr());
+        System.out.println("Destination IP Address: " + icmpFrame.getDstAddr());
+        System.out.println("Type: " + icmpFrame.getType());
+        System.out.println("Code: " + icmpFrame.getCode());
     }
 }
