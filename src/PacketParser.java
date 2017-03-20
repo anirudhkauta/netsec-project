@@ -113,6 +113,7 @@ public class PacketParser {
 //                        tcpDecode(packetBytes);
 //                        arpDecode(packetBytes);
                         icmpDecode(packetBytes);
+                        System.out.println("--------------------");
                         count++;
                     }
                 } else{
@@ -157,7 +158,7 @@ public class PacketParser {
 
     // Read and decodes the ethernet frame
     private static void ethernetDecode(byte[] packet) {
-        System.out.println(driver.byteArrayToString(packet));
+//        System.out.println(driver.byteArrayToString(packet));
         EthernetFrame ethernetFrame = new EthernetFrame(packet, driver);
         System.out.println("Destination MAC Address: " + ethernetFrame.getDestAddr());
         System.out.println("Source MAC Address: " + ethernetFrame.getSrcAddr());

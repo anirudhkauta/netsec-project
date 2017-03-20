@@ -99,4 +99,8 @@ public class Constants {
         }
         return actualAddr;
     }
+
+    public void fileOutput(String filename) {
+        
+    }
 }
